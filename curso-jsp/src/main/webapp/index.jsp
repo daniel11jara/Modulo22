@@ -6,18 +6,35 @@
 <meta charset="UTF-8">
 <title>Curso JSP</title>
 </head>
-<body>
+<body> 
 
 <h1>Bem vindo ao curso JSP</h1>
 
 
 
-<form action="receber-nome.jsp"></form>
+<form action="ServeletLogin" method="post">
+<input type ="hiden" value="<%= request.getParameter("url")%>" name = "url">
+<table>
 
-<input name="nome">
-<input name="idade">
+<tr>
+<td><label>Nome: </label> </td>
+<td><input name="Login" type="text"></td>
+</tr>
 
-<input type="submit" value="Enviar">
+<tr>
+<td><label>Senha: </label> </td>
+<td><input name="Senha" type="password"></td>
+</tr>
 
+<tr>
+<td></td>
+<td><input type="submit" value="Enviar"></td>
+</tr>
+
+</table>
+
+</form>
+
+<h4>${msg}</h4>
 </body>
 </html>
