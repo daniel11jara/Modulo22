@@ -2,6 +2,7 @@ package servelets;
 
 import java.io.IOException;
 
+import dao.DAOloginRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,6 +15,8 @@ import model.ModelLogin;
 @WebServlet(urlPatterns = {"/principal/ServeletLogin", "/ServeletLogin"})//mapeamento da url que vem da tela
 public class ServeletLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private DAOloginRepository daoLoginRepository = new DAOloginRepository();
 
     
     public ServeletLogin() {
@@ -31,6 +34,8 @@ public class ServeletLogin extends HttpServlet {
 		String senha = request.getParameter("Senha");
 		String url = request.getParameter("url");
 		
+		try {
+		
 		//verificado se login e senha estao vazias 
 		if(login != null && !login.isEmpty() && senha != null && !senha.isEmpty()) {
 			ModelLogin modelLogin = new ModelLogin();
@@ -38,7 +43,7 @@ public class ServeletLogin extends HttpServlet {
 			modelLogin.setSenha(senha);
 			
 			//simulando o login
-			if (modelLogin.getLogin().equalsIgnoreCase("admin") && modelLogin.getSenha().equalsIgnoreCase("admin")) {
+			if (daoLoginRepository.validarAutenticacao(modelLogin)) {
 				
 				//mantendo o usuario logado no sistema
 				request.getSession().setAttribute("usuario", modelLogin.getLogin());
@@ -66,7 +71,9 @@ public class ServeletLogin extends HttpServlet {
 			redirecionar.forward(request, response);
 		}
 		
-		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
