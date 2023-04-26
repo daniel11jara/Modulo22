@@ -40,8 +40,12 @@ public class ServeletUsusarioController extends HttpServlet {
 		modelLogin.setLogin(login);
 		modelLogin.setSenha(senha);
 		
+		
+		
+		
 		RequestDispatcher redireciona = request.getRequestDispatcher("principal/usuario.jsp");
 		redireciona.forward(request, response);
+		
 	}
 
 }
