@@ -29,7 +29,7 @@ public class DAOUsuarioRepository {
 		preparedSql.setString(4, objeto.getEmail());
 		
 		preparedSql.execute();//executa a instrucao sql
-		connection.commit();
+		connection.commit();//salva os dados
 		
 	}
 
