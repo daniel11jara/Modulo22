@@ -51,8 +51,10 @@ public class ServeletUsusarioController extends HttpServlet {
 			daoUsuarioRepository.gravarUsuario(modelLogin);
 			
 			request.setAttribute("msg", "Operacao Realizada com Sucesso");
-			request.setAttribute("modelLogin", modelLogin);
+			request.setAttribute("modelLogin", modelLogin);//mantem os dados na tela depois de salvo
 			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+			
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();//redericionando para a pagina de erro
