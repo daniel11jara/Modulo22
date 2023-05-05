@@ -2,6 +2,7 @@ package servelets;
 
 import java.io.IOException;
 
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -48,10 +49,10 @@ public class ServeletUsusarioController extends HttpServlet {
 			modelLogin.setSenha(senha);
 			
 			
-			daoUsuarioRepository.gravarUsuario(modelLogin);
+			modelLogin =  daoUsuarioRepository.gravarUsuario(modelLogin);
 			
 			request.setAttribute("msg", "Operacao Realizada com Sucesso");
-			request.setAttribute("modelLogin", modelLogin);//mantem os dados na tela depois de salvo
+			request.setAttribute("modelLogin", modelLogin);//mantem os dados na tela depois de salvo 
 			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 			
 			
