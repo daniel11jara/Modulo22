@@ -33,6 +33,8 @@ public class ServeletUsusarioController extends HttpServlet {
 		
 		try {
 			
+			String msg = "Operacao Realizada com Sucesso";
+			
 			String id = request.getParameter("id");
 			String nome = request.getParameter("nome");
 			String email = request.getParameter("email");
@@ -48,14 +50,23 @@ public class ServeletUsusarioController extends HttpServlet {
 			modelLogin.setLogin(login);
 			modelLogin.setSenha(senha);
 			
+			//se ja existe um login repetido e estou tentando gravar um novo registro
+			if(daoUsuarioRepository.validarLogin(modelLogin.getLogin()) && modelLogin == null) {
+				msg = "Ja existe usuario com o mesmo login, informe outro login";
+			}else {
+				
+				if (modelLogin.isNovo()) {
+					msg = "Gravado com Sucesso";
+				}else {
+					msg = "Atualizado com sucesso";
+				}
+				
+				modelLogin =  daoUsuarioRepository.gravarUsuario(modelLogin);
+			}
 			
-			modelLogin =  daoUsuarioRepository.gravarUsuario(modelLogin);
-			
-			request.setAttribute("msg", "Operacao Realizada com Sucesso");
+			request.setAttribute("msg", msg);
 			request.setAttribute("modelLogin", modelLogin);//mantem os dados na tela depois de salvo 
 			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
-			
-			
 			
 		} catch (Exception e) {
 			e.printStackTrace();//redericionando para a pagina de erro
