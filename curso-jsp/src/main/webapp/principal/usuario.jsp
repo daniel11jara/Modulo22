@@ -82,14 +82,14 @@
                                                             </div>
                                                            <button type = "button" class="btn btn-primary waves-effect waves-light" onclick = "limparForm();">Novo</button>
                                                            <button type="submit" class="btn btn-success waves-effect waves-light">Salvar</button>
-                                                            <button type="button" class="btn btn-info waves-effect waves-light" onclick="criarDelete()">Excluir</button>
+                                                            <button type="button" class="btn btn-info waves-effect waves-light" onclick="criaDeleteComAjax()">Excluir</button>
                                                         </form>
                                           
                                           </div>
                                           </div>
                                           </div>
                                           </div>
-                                          <span>$(msg)</span>
+                                          <span id="msg">$(msg)</span>
                                           
                                           
                                     </div>
@@ -108,10 +108,37 @@
    <jsp:include page="javascriptfile.jsp"></jsp:include>
    <script type="text/javascript">
    
+   function criaDeleteComAjax() {
+	
+	   if (confirm("Deseja excluir?")) {
+		var urlAction = document.getElementById('formerUser').action;
+		var idUser = document.getElementById('id').value;
+		
+		$.ajax({
+			
+			method: "get",
+			url: urlAction,
+			data: "id=" + idUser + '&acao=deletarajax',
+			success: function(response) {
+				limparform();
+				document.getElementById('msg').textContent = response;
+			}
+			
+		}).fail(function(xhr, status, errorThrown){
+			alert("Erro por deletar usuario por id: " + xhr.responseText);
+		});
+	}
+}
+   
    function criarDelete(){
-	   document.getElementById("formUser").method = 'get';
-	   document.getElementById("acao").value = 'deletar';
-	   document.getElementById("formUser").submit();
+	   
+	   if (confirm("Deseja realmente excluir?")) {
+		   document.getElementById("formUser").method = 'get';
+		   document.getElementById("acao").value = 'deletar';
+		   document.getElementById("formUser").submit();
+	}
+	   
+	   
    }
    
    function limparForm() {
