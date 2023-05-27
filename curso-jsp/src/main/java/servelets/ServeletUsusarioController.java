@@ -1,7 +1,9 @@
 package servelets;
 
 import java.io.IOException;
+import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -39,10 +41,25 @@ public class ServeletUsusarioController extends HttpServlet {
 				
 				request.setAttribute("msg", "Excluido com Sucesso");
 				
-			} 
-					request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+			 
+					
 				
-		} catch (Exception e) {
+		} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarUserAjax")) {
+			
+			String nomeBusca = request.getParameter("nomeBusca");
+			
+			List<ModelLogin>  dadosJsonUser = daoUsuarioRepository.consultaUsuarioList(nomeBusca);
+			
+			ObjectMapper mapper = new ObjectMapper();
+			String json = mapper.writeValueAsString(dadosJsonUser);
+			response.getWriter().write(json);
+			
+		} else {
+			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+		}
+		
+		
+		} catch (Exception e) { 
 			e.printStackTrace();//redericionando para a pagina de erro
 			RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");
 			request.setAttribute("msg", e.getMessage());
