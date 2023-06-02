@@ -171,8 +171,11 @@
 		       url: urlAction,
 		       data: "nomeBusca=" + nomeBusca + '&acao=buscarUserAjax',
 		       success: function(response){
+		    	   //alert(response);
 		    	   
 		    	   var json = JSON.parse(response);
+		    	   
+		    	   console.info(json);
 		    	   
 		    	   $('#tabelaresultados > tbody > tr').remove();
 		    	   

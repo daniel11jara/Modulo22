@@ -48,6 +48,7 @@ public class ServeletUsusarioController extends HttpServlet {
 			
 			String nomeBusca = request.getParameter("nomeBusca");
 			
+			
 			List<ModelLogin>  dadosJsonUser = daoUsuarioRepository.consultaUsuarioList(nomeBusca);
 			
 			ObjectMapper mapper = new ObjectMapper();
