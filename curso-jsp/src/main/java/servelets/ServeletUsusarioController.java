@@ -55,7 +55,16 @@ public class ServeletUsusarioController extends HttpServlet {
 			String json = mapper.writeValueAsString(dadosJsonUser);
 			response.getWriter().write(json);
 			
-		} else {
+		} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarEditar")) {
+			String id = request.getParameter("id");
+			
+			ModelLogin modelLogin = daoUsuarioRepository.consultaUsuarioID(id);
+			
+			request.setAttribute("msg", "Usuario em edição");
+			request.setAttribute("modelLogin", modelLogin);//mantem os dados na tela depois de salvo 
+			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+		}
+		else {
 			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 		}
 		

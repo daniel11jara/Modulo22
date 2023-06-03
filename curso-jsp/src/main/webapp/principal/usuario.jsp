@@ -139,9 +139,9 @@
     
   </tbody>
 </table>
-<span id="totalresultados"></span>
+
  </div>
-        
+ <span id="totalresultados"></span>       
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -156,6 +156,13 @@
    
    
    <script type="text/javascript">
+   
+   function verEditar(id){
+	   var urlAction = document.getElementById('formUser').action;
+	   //urlAction = endereço completo do servidor, projeto e servelet
+	   
+	   window.location.href = urlAction + '?acao=buscarEditar&id=' + id;
+   }
    
    
    function buscarUsuario(){
@@ -177,13 +184,13 @@
 		    	   
 		    	   console.info(json);
 		    	   
-		    	   $('#tabelaresultados > tbody > tr').remove();
+		    	   $('#tabelaresultados > tbody > tr').remove();//dentro da tabela vai remover todas as linhas
 		    	   
-		    	   for(var p = 0; p < json.lenght; p++) {
-		    		   $('#tabelaresultados > tbody').append('<tr> <td>'+json[p].id+' </td> <td>'+json[p].nome+' </td> <td><button type="button" class="btn btn-info">Ver</button></td> </tr>');
-		    	   }
+		    	   for(var p = 0; p < json.length; p++) {
+		    		   $('#tabelaresultados > tbody').append('<tr> <td>'+json[p].id+' </td> <td>'+json[p].nome+' </td> <td><button onclick = "verEditar('+json[p].id+')" type="button" class="btn btn-info">Ver</button></td> </tr>');
+		    	   }//dentro da tabela esta adicionando (.append ) uma linha
 		    	   
-		    	   document.getElementById('totalresultados').textContent = 'Resultados: ' + json.lenght;
+		    	   document.getElementById('totalresultados').textContent = 'Resultados: ' + json.length;
 		    	   
 		       }
 		   }).fail(function(xhr, status, errorThrown){
