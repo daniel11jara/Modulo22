@@ -19,17 +19,18 @@ public class DAOUsuarioRepository {
 		connection = SingleConnectionBanco.getConnection();
 	}
 	
-	public ModelLogin gravarUsuario(ModelLogin objeto) throws Exception  {
+	public ModelLogin gravarUsuario(ModelLogin objeto, Long userLogado) throws Exception  {
 		
 		if (objeto.isNovo()) {//grava um novo usuario
 			
-		String sql = "INSERT INTO model_login(login, senha, nome, email) VALUES (?, ?, ?, ?);";
+		String sql = "INSERT INTO model_login(login, senha, nome, email, usuario_id) VALUES (?, ?, ?, ?, ?);";
 		PreparedStatement preparedSql = connection.prepareStatement(sql);
 		
 		preparedSql.setString(1, objeto.getLogin());
 		preparedSql.setString(2, objeto.getSenha());
 		preparedSql.setString(3, objeto.getNome());
 		preparedSql.setString(4, objeto.getEmail());
+		preparedSql.setLong(5, userLogado);
 		
 		preparedSql.execute();//executa a instrucao sql
 		connection.commit();//salva os dados
@@ -50,15 +51,15 @@ public class DAOUsuarioRepository {
 					
 		}
 		
-		return this.consultaUsuario(objeto.getLogin());
+		return this.consultaUsuario(objeto.getLogin(), userLogado);
 		
 	}
 	
 	
-	public List<ModelLogin> consultaUsuarioList() throws Exception{
+	public List<ModelLogin> consultaUsuarioList(Long userLogado) throws Exception{
 		List<ModelLogin> retorno = new ArrayList<ModelLogin>();
 		
-		String sql = "select * from model_login";
+		String sql = "select * from model_login where useradmin is false and usuario_id =" + userLogado;
 		
 		PreparedStatement statement = connection.prepareStatement(sql);
 		
@@ -81,13 +82,14 @@ public class DAOUsuarioRepository {
 	
 	
 	
-	public List<ModelLogin> consultaUsuarioList(String nome) throws Exception{
+	public List<ModelLogin> consultaUsuarioList(String nome, Long userLogado) throws Exception{
 		List<ModelLogin> retorno = new ArrayList<ModelLogin>();
 		
-		String sql = "select * from model_login where upper (nome) like upper(?) ";
+		String sql = "select * from model_login where upper (nome) like upper(?) and useradmin is false and usuario_id = ?";
 		
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, "%" + nome + "%");
+		statement.setLong(2, userLogado);
 		
 		ResultSet resultado = statement.executeQuery();
 		
@@ -105,7 +107,8 @@ public class DAOUsuarioRepository {
 		return retorno;
 	}
 	
-	public ModelLogin consultaUsuario(String login) throws Exception {
+	
+public ModelLogin consultaUsuarioLogado(String login) throws Exception {
 		
 		ModelLogin modellogin = new ModelLogin();
 		
@@ -127,14 +130,60 @@ public class DAOUsuarioRepository {
 	}
 	
 	
-public ModelLogin consultaUsuarioID(String id) throws Exception {
+	
+public ModelLogin consultaUsuario(String login) throws Exception {
 		
 		ModelLogin modellogin = new ModelLogin();
 		
-		String sql = "select * from model_login where id = ? ";
+		String sql = "select * from model_login where upper (login) = upper ('" + login + "') and useradmin is false";
+		 
+		PreparedStatement statement = connection.prepareStatement(sql);
+		
+		ResultSet resultado = statement.executeQuery();
+		
+		while (resultado.next()) {
+			modellogin.setId(resultado.getLong("id"));
+			modellogin.setEmail(resultado.getString("email"));
+			modellogin.setLogin(resultado.getString("login"));
+			modellogin.setSenha(resultado.getString("senha"));
+			modellogin.setNome(resultado.getString("nome"));
+		}
+		
+		return modellogin;
+	}
+	
+	
+	public ModelLogin consultaUsuario(String login, Long userLogado) throws Exception {
+		
+		ModelLogin modellogin = new ModelLogin();
+		
+		String sql = "select * from model_login where upper (login) = upper ('" + login + "') and useradmin is false and usuario_id =" + userLogado;
+		 
+		PreparedStatement statement = connection.prepareStatement(sql);
+		
+		ResultSet resultado = statement.executeQuery();
+		
+		while (resultado.next()) {
+			modellogin.setId(resultado.getLong("id"));
+			modellogin.setEmail(resultado.getString("email"));
+			modellogin.setLogin(resultado.getString("login"));
+			modellogin.setSenha(resultado.getString("senha"));
+			modellogin.setNome(resultado.getString("nome"));
+		}
+		
+		return modellogin;
+	}
+	
+	
+public ModelLogin consultaUsuarioID(String id, Long userLogado) throws Exception {
+		
+		ModelLogin modellogin = new ModelLogin();
+		
+		String sql = "select * from model_login where id = ? and useradmin is false and usuario_id = ?";
 		 
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setLong(1, Long.parseLong(id));
+		statement.setLong(2, userLogado);
 		
 		ResultSet resultado = statement.executeQuery();
 		
@@ -163,7 +212,7 @@ public ModelLogin consultaUsuarioID(String id) throws Exception {
 	}
 	
 	public void deletarUser(String idUser) throws Exception {
-		String sql = "DELETE FROM model_login WHERE id = ?;";
+		String sql = "DELETE FROM model_login WHERE id = ? and useradmin is false;";
 		PreparedStatement prepareSql = connection.prepareStatement(sql);
 		prepareSql.setLong(1, Long.parseLong(idUser));
 		prepareSql.executeUpdate();
