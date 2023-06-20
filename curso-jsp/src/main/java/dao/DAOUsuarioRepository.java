@@ -72,6 +72,7 @@ public class DAOUsuarioRepository {
 			modelLogin.setId(resultado.getLong("id"));
 			modelLogin.setLogin(resultado.getString("login"));
 			modelLogin.setNome(resultado.getString("nome"));
+			modelLogin.setUseradmin(resultado.getBoolean("useradmin"));
 			//modelLogin.setSenha(resultado.getString("senha"));
 			
 			retorno.add(modelLogin);
@@ -124,6 +125,7 @@ public ModelLogin consultaUsuarioLogado(String login) throws Exception {
 			modellogin.setLogin(resultado.getString("login"));
 			modellogin.setSenha(resultado.getString("senha"));
 			modellogin.setNome(resultado.getString("nome"));
+			modellogin.setUseradmin(resultado.getBoolean("useradmin"));
 		}
 		
 		return modellogin;

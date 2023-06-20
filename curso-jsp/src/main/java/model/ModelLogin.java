@@ -12,6 +12,16 @@ public class ModelLogin implements Serializable{
 	private String email;
 	private String login;
 	private String senha;
+	private boolean useradmin;
+	
+	
+	public void setUseradmin(boolean useradmin) {
+		this.useradmin = useradmin;
+	}
+	
+	public boolean getUseradmin() {
+		return useradmin;
+	}
 	
 	public  boolean isNovo() {//para ver se é um novo registro
 		
