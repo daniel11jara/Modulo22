@@ -40,10 +40,10 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 			throws IOException, ServletException {
 
 		try {
-
+									//fazendo uma conversao de ServeletRequest para HttpSereveletRequest
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();
-
+									//convertendo para string
 			String usuarioLogado = (String) session.getAttribute("usuario");
 
 			// url que esta sendo acessado
@@ -51,7 +51,9 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 
 			// validando se esta logado
 			if (usuarioLogado == null && !urlParaAutenticar.equalsIgnoreCase("/principal/ServletLogin")) {
-
+				
+				//se o usuario tentar acessar uma pagina do sistema sem estar logado
+				//ele vai ser direcionado para a tela de login, para isso usamos o RequestDispatcher
 				javax.servlet.RequestDispatcher redireciona = request
 						.getRequestDispatcher("/index.jsp?url=" + urlParaAutenticar);
 				request.setAttribute("msg", "por favor realize o login!");
