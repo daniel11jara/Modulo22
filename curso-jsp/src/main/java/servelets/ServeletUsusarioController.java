@@ -111,6 +111,7 @@ public class ServeletUsusarioController extends ServletGenericUtil {
 			String email = request.getParameter("email");
 			String login = request.getParameter("login");
 			String senha = request.getParameter("senha");
+			String perfil = request.getParameter("perfil");
 			
 			ModelLogin modelLogin = new ModelLogin();
 			
@@ -120,6 +121,7 @@ public class ServeletUsusarioController extends ServletGenericUtil {
 			modelLogin.setEmail(email);
 			modelLogin.setLogin(login);
 			modelLogin.setSenha(senha);
+			modelLogin.setPerfil(perfil);
 			
 			//se ja existe um login repetido e estou tentando gravar um novo registro
 			if(daoUsuarioRepository.validarLogin(modelLogin.getLogin()) && modelLogin == null) {
